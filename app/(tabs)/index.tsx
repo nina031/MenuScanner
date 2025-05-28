@@ -1,6 +1,7 @@
 // app/(tabs)/index.tsx
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
+import { Link } from "expo-router";
 import Header from "../components/Header";
 import { Card, CardContent, CardTitle, CardDescription } from "../components/ui/card";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,7 +17,6 @@ type Feature = {
 };
 
 export default function Index() {
-
 
   const features: Feature[] = [
     {
@@ -43,9 +43,7 @@ export default function Index() {
     <View style={{ flex: 1, backgroundColor: '#f8fafc' }}>
       <Header />
 
-      <View 
-        className="flex-1" 
-      >
+      <View className="flex-1">
         {/* Logo et titre */}
         <View className="px-6 py-8 items-center">
           <View className="w-20 h-20 bg-white rounded-2xl items-center justify-center mb-4 shadow-lg">
@@ -60,36 +58,40 @@ export default function Index() {
           </Text>
         </View>
 
-          {/* Section des fonctionnalités */}
-          <View className="mb-6 px-6">
-            <View className="flex-row gap-3">
-              {features.map((feature, index) => (
-                <Card key={index} className="bg-white border-gray-50 flex-1">
-                  <CardContent className="p-3 items-center">
-                    <View 
-                      className="w-10 h-10 rounded-xl items-center justify-center mb-2"
-                      style={{ backgroundColor: `${feature.color}15` }}
-                    >
-                      <Ionicons 
-                        name={feature.icon} 
-                        size={20} 
-                        color={feature.color} 
-                      />
-                    </View>
-                    <CardTitle className="text-xs font-semibold text-gray-800 text-center mb-1">
-                      {feature.title}
-                    </CardTitle>
-                    <CardDescription className="text-xs text-gray-600 text-center">
-                      {feature.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              ))}
-            </View>
+        {/* Section des fonctionnalités */}
+        <View className="mb-6 px-6">
+          <View className="flex-row gap-3">
+            {features.map((feature, index) => (
+              <Card key={index} className="bg-white border-gray-50 flex-1">
+                <CardContent className="p-3 items-center">
+                  <View 
+                    className="w-10 h-10 rounded-xl items-center justify-center mb-2"
+                    style={{ backgroundColor: `${feature.color}15` }}
+                  >
+                    <Ionicons 
+                      name={feature.icon} 
+                      size={20} 
+                      color={feature.color} 
+                    />
+                  </View>
+                  <CardTitle className="text-xs font-semibold text-gray-800 text-center mb-1">
+                    {feature.title}
+                  </CardTitle>
+                  <CardDescription className="text-xs text-gray-600 text-center">
+                    {feature.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            ))}
           </View>
-          {/* Section des scans recents */}
-          <RecentScans />
+        </View>
+
+        {/* Section des scans recents */}
+        <RecentScans />
       </View>
+
+      {/* Bouton scan flottant positionné au centre de la tabbar */}
+      
     </View>
   );
 }
