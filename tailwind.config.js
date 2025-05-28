@@ -9,11 +9,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#2A9D8F",
-        light: "#7ED4C6",
-        oklch: {
-          custom: 'oklch(70.5% 0.015 286.067)',
-        },
+        primary: "#129EA1",
+        light: "#D3EBEB",
       },
     },
   },

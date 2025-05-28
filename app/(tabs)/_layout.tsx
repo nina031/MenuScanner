@@ -14,7 +14,7 @@ const _layout = () => {
         justifyContent: 'center',
       },
       tabBarStyle: {
-        backgroundColor: '#ebfffa',
+        backgroundColor: '#D3EBEB',
          borderRadius: 50,
          marginHorizontal: 20,
          marginBottom: 36,
@@ -52,7 +52,7 @@ const _layout = () => {
           tabBarIcon: () => (
             <View style={[
               styles.scanButton,
-              { backgroundColor: '#2A9D8F' }
+              { backgroundColor: '#129EA1' }
             ]}>
               <Ionicons 
                 name="camera" 

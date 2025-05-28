@@ -8,7 +8,7 @@ export default function Header() {
     return (
         <View className="w-full">
             <LinearGradient
-                colors={['#7ED4C6', '#2A9D8F']}
+                colors={['#A2DEDE', '#129EA1']}
                 className="w-full"
             >
                 <SafeAreaView edges={['top']} className="w-full">

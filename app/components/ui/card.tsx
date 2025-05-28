@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, type TextProps, View, type ViewProps } from 'react-native';
 import { TextClassContext } from './text';
-import { cn } from '../../lib/utils';
+import { cn } from '../../../lib/utils';
 
 function Card({
   className,
@@ -80,3 +80,7 @@ function CardFooter({
 }
 
 export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };
+
+// Exportation par défaut factice pour éviter les avertissements de route Expo Router
+const DummyCard = () => null;
+export default DummyCard;
