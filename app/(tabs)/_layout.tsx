@@ -47,26 +47,6 @@ const _layout = () => {
           }}
         />
         <Tabs.Screen 
-          name="scan" 
-          options={{ 
-            title: 'Scan',
-            tabBarLabel: '',
-            headerShown: false, 
-            tabBarIcon: () => (
-              <View style={[
-                styles.scanButton,
-                { backgroundColor: '#129EA1' }
-              ]}>
-                <Ionicons 
-                  name="camera" 
-                  size={24} 
-                  color="white" 
-                />
-              </View>
-            )
-          }}
-        />
-        <Tabs.Screen 
           name="profile" 
           options={{ 
             title: 'Profile', 
