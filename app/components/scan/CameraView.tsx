@@ -1,5 +1,5 @@
-// app/components/CameraView.tsx
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+// app/components/scan/CameraView.tsx
+import { CameraView, CameraType, useCameraPermissions, FlashMode } from 'expo-camera';
 import { useState, useRef } from 'react';
 import { Text, TouchableOpacity, View, Alert, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ interface CameraViewComponentProps {
 
 export default function CameraViewComponent({ onPhotoTaken, onClose }: CameraViewComponentProps) {
   const [facing, setFacing] = useState<CameraType>('back');
+  const [flashMode, setFlashMode] = useState<FlashMode>('off');
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
 
@@ -48,8 +49,31 @@ export default function CameraViewComponent({ onPhotoTaken, onClose }: CameraVie
     );
   }
 
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
+  function toggleFlash() {
+    setFlashMode(current => {
+      switch (current) {
+        case 'off':
+          return 'on';
+        case 'on':
+          return 'auto';
+        case 'auto':
+          return 'off';
+        default:
+          return 'off';
+      }
+    });
+  }
+
+  function getFlashIcon() {
+    switch (flashMode) {
+      case 'on':
+        return 'flash';
+      case 'auto':
+        return 'flash-outline';
+      case 'off':
+      default:
+        return 'flash-off';
+    }
   }
 
   async function takePicture() {
@@ -77,6 +101,7 @@ export default function CameraViewComponent({ onPhotoTaken, onClose }: CameraVie
       <CameraView 
         style={{ flex: 1 }}
         facing={facing}
+        flash={flashMode}
         ref={cameraRef}
         mode="picture"
       >
@@ -95,20 +120,19 @@ export default function CameraViewComponent({ onPhotoTaken, onClose }: CameraVie
             
             <TouchableOpacity 
               className="w-12 h-12 rounded-full bg-black/50 justify-center items-center"
-              onPress={toggleCameraFacing}
+              onPress={toggleFlash}
               activeOpacity={0.7}
             >
-              <Ionicons name="camera-reverse" size={28} color="white" />
+              <Ionicons 
+                name={getFlashIcon()} 
+                size={28} 
+                color={flashMode === 'off' ? '#9CA3AF' : 'white'} 
+              />
             </TouchableOpacity>
           </View>
 
           {/* Zone de scan avec cadre */}
-          <View className="flex-1 justify-center items-center px-8 border-2 border-primary rounded-lg">
-            <Text className="text-white text-base text-center mt-6 bg-black/60 px-4 py-2 rounded-lg max-w-xs">
-              Positionnez le menu dans le cadre
-            </Text>
-          </View>
-
+          <View className="flex-1 justify-center items-center px-8 border-2 border-primary rounded-lg"/>
           {/* Bouton de capture */}
           <View className="p-6 pb-10 items-center bg-black/20">
             <TouchableOpacity 

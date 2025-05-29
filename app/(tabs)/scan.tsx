@@ -1,15 +1,13 @@
 // app/(tabs)/scan.tsx
 import React, { useState, useCallback, useLayoutEffect } from 'react';
-import { Alert, Image, Text, TouchableOpacity, View, StatusBar } from 'react-native';
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import CameraViewComponent from '../components/scan/CameraView';
-import { Ionicons } from '@expo/vector-icons';
 
 type RootStackParamList = {
   Home: undefined;
-  // Ajoutez d'autres écrans ici si nécessaire
 };
 
 type ScanScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -21,6 +19,9 @@ const Scan = () => {
 
   // Masquer la tabBar pour cet écran
   useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    });
     navigation.getParent()?.setOptions({
       tabBarStyle: { display: 'none' },
     });
