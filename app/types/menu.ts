@@ -18,6 +18,7 @@ export interface MenuSection {
 }
 
 export interface Menu {
+  name: string;
   sections: MenuSection[];
 }
 

@@ -70,9 +70,9 @@ const recentScans = [
     <TouchableOpacity
       key={scan.id}
       activeOpacity={0.7}
-      className="flex-row items-center bg-white p-3 sm:p-4 rounded-xl border border-gray-100 mb-2"
+      className="flex-row items-center bg-white p-4 rounded-xl border border-gray-100 mb-2"
     >
-      <View className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden mr-3 sm:mr-4 bg-gray-200">
+      <View className="w-12 h-12 sm:w-12 sm:h-12 rounded-lg overflow-hidden mr-3 sm:mr-4 bg-gray-200">
         <Image
           source={{ uri: scan.image }}
           className="w-full h-full"

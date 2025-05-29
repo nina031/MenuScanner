@@ -89,8 +89,6 @@ export default function Index() {
         {/* Section des scans recents */}
         <RecentScans />
       </View>
-
-      {/* Bouton scan flottant positionné au centre de la tabbar */}
       
     </View>
   );

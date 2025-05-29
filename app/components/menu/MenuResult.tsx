@@ -42,7 +42,7 @@ const MenuResult: React.FC<MenuResultProps> = ({ imageUri, onClose }) => {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#0066cc" />
+        <ActivityIndicator size="large" color="#129EA1" />
         <Text className="mt-4 text-gray-600">Analyse du menu en cours...</Text>
       </View>
     );

@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MenuItem } from '../../types/menu';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, SlideInUp } from 'react-native-reanimated';
+import DietaryBadges from './DietaryBadges';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -15,37 +16,7 @@ type MenuItemDetailsProps = {
 };
 
 const MenuItemDetails: React.FC<MenuItemDetailsProps> = ({ item, onClose }) => {
-  // Générer les couleurs pour les badges diététiques
-  const getDietInfo = (diet: string): { colors: readonly [string, string]; icon: string; label: string; } => {
-    const dietInfo = {
-      'végétarien': {
-        colors: ['#10B981', '#059669'] as const,
-        icon: 'leaf',
-        label: 'Végétarien'
-      },
-      'végétalien': {
-        colors: ['#14B8A6', '#0D9488'] as const,
-        icon: 'sprout',
-        label: 'Végétalien'
-      },
-      'sans_gluten': {
-        colors: ['#F59E0B', '#D97706'] as const,
-        icon: 'barley-off',
-        label: 'Sans gluten'
-      },
-      'sans_lactose': {
-        colors: ['#3B82F6', '#2563EB'] as const,
-        icon: 'cow-off',
-        label: 'Sans lactose'
-      }
-    };
-    
-    return dietInfo[diet as keyof typeof dietInfo] || {
-      colors: ['#6B7280', '#4B5563'] as const,
-      icon: 'information-outline',
-      label: diet
-    };
-  };
+
   
   return (
     <Modal
@@ -87,37 +58,12 @@ const MenuItemDetails: React.FC<MenuItemDetailsProps> = ({ item, onClose }) => {
                   </Text>
                   
                   {/* Tags diététiques */}
-                  {item.dietary.length > 0 && (
-                    <ScrollView 
-                      horizontal 
-                      showsHorizontalScrollIndicator={false}
-                      className="flex-row"
-                    >
-                      {item.dietary.map((diet, index) => {
-                        const dietInfo = getDietInfo(diet);
-                        return (
-                          <LinearGradient
-                            key={index}
-                            colors={dietInfo.colors}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 1 }}
-                            className="rounded-full px-3 py-1.5 mr-2 flex-row items-center"
-                          >
-                            <MaterialCommunityIcons 
-                              // @ts-ignore
-                              name={dietInfo.icon} 
-                              size={14} 
-                              color="white" 
-                              style={{ marginRight: 4 }}
-                            />
-                            <Text className="text-xs font-semibold text-white">
-                              {dietInfo.label}
-                            </Text>
-                          </LinearGradient>
-                        );
-                      })}
-                    </ScrollView>
-                  )}
+                  <DietaryBadges
+                    dietary={item.dietary}
+                    variant="simple"
+                    animate
+                    containerClassName="flex-row flex-wrap mt-2"
+                  />
                 </View>
                 
                 <View className="bg-primary/10 px-4 py-2 rounded-xl">
