@@ -1,7 +1,13 @@
+// app/components/menu/MenuItemDetails.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StatusBar, Modal, Dimensions } from 'react-native';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MenuItem } from '../../types/menu';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import Animated, { FadeIn, SlideInUp } from 'react-native-reanimated';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 type MenuItemDetailsProps = {
   item: MenuItem;
@@ -10,144 +16,179 @@ type MenuItemDetailsProps = {
 
 const MenuItemDetails: React.FC<MenuItemDetailsProps> = ({ item, onClose }) => {
   // Générer les couleurs pour les badges diététiques
-  const getDietColor = (diet: string) => {
-    const colors = {
-      'végétarien': ['bg-green-100', 'text-green-700', 'leaf'],
-      'végétalien': ['bg-teal-100', 'text-teal-700', 'leaf-maple'],
-      'sans_gluten': ['bg-amber-100', 'text-amber-700', 'barley-off'],
-      'sans_lactose': ['bg-blue-100', 'text-blue-700', 'cow-off']
-    };
-    
-    return colors[diet as keyof typeof colors] || ['bg-gray-100', 'text-gray-700', 'information-outline'];
-  };
-  
-  // Obtenir une icône basée sur l'ingrédient (exemple simple)
-  const getIngredientIcon = (ingredient: string) => {
-    const icons: {[key: string]: string} = {
-      'tomate': 'food-apple',
-      'tomates': 'food-apple',
-      'fromage': 'cheese',
-      'mozzarella': 'cheese',
-      'parmesan': 'cheese',
-      'oignon': 'food-apple-outline',
-      'oignons': 'food-apple-outline',
-      'viande': 'food-steak',
-      'boeuf': 'food-steak',
-      'porc': 'food-steak',
-      'poulet': 'food-drumstick',
-      'poisson': 'fish',
-      'pain': 'bread-slice',
-      'pâtes': 'noodles',
-    };
-    
-    // Chercher des correspondances partielles
-    for (const [key, icon] of Object.entries(icons)) {
-      if (ingredient.includes(key)) {
-        return icon;
+  const getDietInfo = (diet: string): { colors: readonly [string, string]; icon: string; label: string; } => {
+    const dietInfo = {
+      'végétarien': {
+        colors: ['#10B981', '#059669'] as const,
+        icon: 'leaf',
+        label: 'Végétarien'
+      },
+      'végétalien': {
+        colors: ['#14B8A6', '#0D9488'] as const,
+        icon: 'sprout',
+        label: 'Végétalien'
+      },
+      'sans_gluten': {
+        colors: ['#F59E0B', '#D97706'] as const,
+        icon: 'barley-off',
+        label: 'Sans gluten'
+      },
+      'sans_lactose': {
+        colors: ['#3B82F6', '#2563EB'] as const,
+        icon: 'cow-off',
+        label: 'Sans lactose'
       }
-    }
-    return 'silverware-fork-knife'; // icône par défaut
+    };
+    
+    return dietInfo[diet as keyof typeof dietInfo] || {
+      colors: ['#6B7280', '#4B5563'] as const,
+      icon: 'information-outline',
+      label: diet
+    };
   };
   
   return (
-    <View className="flex-1 bg-gray-50">
-      <StatusBar barStyle="dark-content" />
-      
-      {/* Header avec bouton de retour */}
-      <View className="bg-white pt-12 pb-4 px-4 shadow-sm">
-        <View className="flex-row justify-between items-center">
+    <Modal
+      visible={true}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <View className="flex-1 bg-black/50">
+        <Animated.View 
+          entering={FadeIn}
+          className="absolute inset-0"
+        >
           <TouchableOpacity 
-            onPress={onClose} 
-            className="w-10 h-10 justify-center items-center rounded-full bg-gray-50"
-          >
-            <Ionicons name="chevron-back" size={24} color="#333" />
-          </TouchableOpacity>
-          <Text className="text-xl font-bold text-gray-800">Détails du plat</Text>
-          <View style={{ width: 40 }} />
-        </View>
-      </View>
+            activeOpacity={1}
+            onPress={onClose}
+            className="flex-1"
+          />
+        </Animated.View>
 
-      <ScrollView className="flex-1">
-        {/* Nom et prix */}
-        <View className="p-6 bg-white mt-4 mx-4 rounded-xl shadow-sm">
-          <Text className="text-2xl font-bold text-gray-800">{item.name}</Text>
-          
-          {/* Tags diététiques horizontaux */}
-          {item.dietary.length > 0 && (
-            <View className="flex-row flex-wrap mt-2">
-              {item.dietary.map((diet, index) => {
-                const [bgColor, textColor, iconName] = getDietColor(diet);
-                return (
-                  <View 
-                    key={index} 
-                    className={`${bgColor} rounded-full px-3 py-1.5 mr-2 mb-1 flex-row items-center`}
-                  >
-                    <MaterialCommunityIcons 
-                      // @ts-ignore - Nous savons que ces noms d'icônes sont valides
-                      name={iconName} 
-                      size={14} 
-                      color={textColor.includes('green') ? '#15803d' : 
-                             textColor.includes('teal') ? '#0f766e' : 
-                             textColor.includes('amber') ? '#b45309' : 
-                             textColor.includes('blue') ? '#1d4ed8' : '#374151'} 
-                      style={{ marginRight: 4 }}
-                    />
-                    <Text className={`text-sm font-medium ${textColor}`}>
-                      {diet.charAt(0).toUpperCase() + diet.slice(1).replace('_', ' ')}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          )}
-          
-          <Text className="text-xl font-bold text-primary mt-3">
-            {item.price.value}{item.price.currency}
-          </Text>
-        </View>
-
-        {/* Description */}
-        <View className="p-6 bg-white mt-4 mx-4 rounded-xl shadow-sm">
-          <View className="flex-row items-center mb-3">
-            <MaterialCommunityIcons name="text-box-outline" size={18} color="#4b5563" />
-            <Text className="text-base text-gray-600 font-medium ml-2">DESCRIPTION</Text>
-          </View>
-          <Text className="text-base text-gray-700 leading-6">{item.description}</Text>
-        </View>
-
-        {/* Ingrédients */}
-        {item.ingredients.length > 0 && (
-          <View className="p-6 bg-white mt-4 mx-4 rounded-xl shadow-sm">
-            <View className="flex-row items-center mb-3">
-              <MaterialCommunityIcons name="food-variant" size={18} color="#4b5563" />
-              <Text className="text-base text-gray-600 font-medium ml-2">INGRÉDIENTS</Text>
-            </View>
-            <View className="flex-row flex-wrap">
-              {item.ingredients.map((ingredient, index) => (
-                <View 
-                  key={index} 
-                  className="bg-gray-100 rounded-full px-3 py-2 mr-2 mb-2 flex-row items-center"
-                >
-                  <MaterialCommunityIcons 
-                    // @ts-ignore - Nous savons que ces noms d'icônes sont valides
-                    name={getIngredientIcon(ingredient)} 
-                    size={14} 
-                    color="#4b5563" 
-                    style={{ marginRight: 4 }}
-                  />
-                  <Text className="text-sm text-gray-700 font-medium">
-                    {ingredient.charAt(0).toUpperCase() + ingredient.slice(1)}
+        <Animated.View 
+          entering={SlideInUp.springify()}
+          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl"
+          style={{ maxHeight: SCREEN_HEIGHT * 0.9 }}
+        >
+          {/* Header avec le prix */}
+          <View className="relative overflow-hidden">
+            <LinearGradient
+              colors={['#f9fafb', '#f3f4f6']}
+              className="px-5 pt-6 pb-4"
+            >
+              {/* Barre de fermeture */}
+              <View className="w-12 h-1 bg-gray-300 rounded-full self-center mb-4" />
+              
+              <View className="flex-row justify-between items-start">
+                <View className="flex-1 pr-4">
+                  <Text className="text-2xl font-bold text-gray-900 mb-2">
+                    {item.name}
+                  </Text>
+                  
+                  {/* Tags diététiques */}
+                  {item.dietary.length > 0 && (
+                    <ScrollView 
+                      horizontal 
+                      showsHorizontalScrollIndicator={false}
+                      className="flex-row"
+                    >
+                      {item.dietary.map((diet, index) => {
+                        const dietInfo = getDietInfo(diet);
+                        return (
+                          <LinearGradient
+                            key={index}
+                            colors={dietInfo.colors}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 1 }}
+                            className="rounded-full px-3 py-1.5 mr-2 flex-row items-center"
+                          >
+                            <MaterialCommunityIcons 
+                              // @ts-ignore
+                              name={dietInfo.icon} 
+                              size={14} 
+                              color="white" 
+                              style={{ marginRight: 4 }}
+                            />
+                            <Text className="text-xs font-semibold text-white">
+                              {dietInfo.label}
+                            </Text>
+                          </LinearGradient>
+                        );
+                      })}
+                    </ScrollView>
+                  )}
+                </View>
+                
+                <View className="bg-primary/10 px-4 py-2 rounded-xl">
+                  <Text className="text-2xl font-bold text-primary">
+                    {item.price.value.toFixed(2)}{item.price.currency}
                   </Text>
                 </View>
-              ))}
-            </View>
+              </View>
+            </LinearGradient>
           </View>
-        )}
-        
-        {/* Espace en bas */}
-        <View className="h-10" />
-      </ScrollView>
-    </View>
+
+          <ScrollView 
+            className="flex-1"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 30 }}
+          >
+            {/* Description */}
+            <View className="px-5 pt-5">
+              <View className="flex-row items-center mb-3">
+                <View className="w-10 h-10 rounded-full bg-gray-100 justify-center items-center mr-3">
+                  <MaterialCommunityIcons name="text-box-outline" size={20} color="#6B7280" />
+                </View>
+                <Text className="text-base font-semibold text-gray-700">Description</Text>
+              </View>
+              <View className="bg-gray-50 rounded-2xl p-4">
+                <Text className="text-base text-gray-700 leading-6">{item.description}</Text>
+              </View>
+            </View>
+
+            {/* Ingrédients */}
+            {item.ingredients.length > 0 && (
+              <View className="px-5 pt-5">
+                <View className="flex-row items-center mb-3">
+                  <View className="w-10 h-10 rounded-full bg-primary/10 justify-center items-center mr-3">
+                    <MaterialCommunityIcons name="food-variant" size={20} color="#129EA1" />
+                  </View>
+                  <Text className="text-base font-semibold text-gray-700">
+                    Ingrédients ({item.ingredients.length})
+                  </Text>
+                </View>
+                <View className="flex-row flex-wrap">
+                  {item.ingredients.map((ingredient, index) => (
+                    <View 
+                      key={index} 
+                      className="bg-white border border-gray-200 rounded-xl px-3.5 py-2 mr-2 mb-2 shadow-sm"
+                    >
+                      <Text className="text-sm text-gray-700 font-medium capitalize">
+                        {ingredient}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {/* Bouton de fermeture */}
+            <View className="px-5 pt-6">
+              <TouchableOpacity
+                onPress={onClose}
+                className="bg-gray-100 py-4 rounded-2xl"
+                activeOpacity={0.8}
+              >
+                <Text className="text-center font-semibold text-gray-700 text-base">
+                  Fermer
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </Animated.View>
+      </View>
+    </Modal>
   );
 };
 

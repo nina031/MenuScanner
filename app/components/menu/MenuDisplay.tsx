@@ -1,122 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, StatusBar } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Menu, MenuSection as MenuSectionType, MenuItem as MenuItemType } from '../../types/menu';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import MenuItemDetails from './MenuItemDetails';
+// app/components/menu/MenuDisplay.tsx
+import React from 'react';
+import { View, ScrollView, Dimensions, Text, TouchableOpacity } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  interpolate,
+  Extrapolate,
+} from 'react-native-reanimated';
+import Header from '../Header';
+import MenuItemModal from './MenuItem';
+import MenuFilters from './MenuFilters';
+import { Menu } from '../../types/menu';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '../ui/accordion';
+import { MenuItem as MenuItemType } from '../../types/menu';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 type MenuDisplayProps = {
   menu: Menu;
   onClose?: () => void;
 };
 
-const MenuDisplay: React.FC<MenuDisplayProps> = ({ menu, onClose }) => {
-  const [expandedSections, setExpandedSections] = useState<string[]>(menu.sections.map(section => section.name));
-  const [filterVisible, setFilterVisible] = useState(false);
-  const navigation = useNavigation();
+const MenuDisplay: React.FC<MenuDisplayProps> = ({ menu }) => {
+  const [selectedItem, setSelectedItem] = React.useState<MenuItemType | null>(null);
+  const scrollY = useSharedValue(0);
 
-  const toggleSection = (sectionName: string) => {
-    setExpandedSections(prev => 
-      prev.includes(sectionName)
-        ? prev.filter(name => name !== sectionName)
-        : [...prev, sectionName]
-    );
-  };
+  const headerAnimatedStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(scrollY.value, [0, 100], [0, -50], Extrapolate.CLAMP);
+    return {
+      transform: [{ translateY }],
+    };
+  });
 
-  return (
-    <View className="flex-1 bg-gray-50">
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      
-      {/* Header avec bouton de retour et filtre */}
-      <View className="bg-white pt-12 pb-4 px-4 shadow-sm">
-        <View className="flex-row justify-between items-center">
-          {onClose && (
-            <TouchableOpacity onPress={onClose} className="w-10 h-10 justify-center items-center rounded-full bg-gray-50">
-              <Ionicons name="chevron-back" size={24} color="#333" />
-            </TouchableOpacity>
-          )}
-          
-          <Text className="text-xl font-bold text-gray-800">Menu Scanné</Text>
-          
-          <TouchableOpacity 
-            onPress={() => setFilterVisible(true)} 
-            className="w-10 h-10 justify-center items-center rounded-full bg-gray-50"
-          >
-            <Ionicons name="options-outline" size={22} color="#333" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Contenu principal */}
-      <ScrollView className="flex-1">
-        {menu.sections.map((section, index) => (
-          <MenuSection 
-            key={`${section.name}-${index}`}
-            section={section}
-            isExpanded={expandedSections.includes(section.name)}
-            onToggle={() => toggleSection(section.name)}
-          />
-        ))}
-        
-        {/* Espace en bas pour permettre le défilement complet */}
-        <View className="h-20" />
-      </ScrollView>
-    </View>
-  );
-};
-
-type MenuSectionProps = {
-  section: MenuSectionType;
-  isExpanded: boolean;
-  onToggle: () => void;
-};
-
-const MenuSection: React.FC<MenuSectionProps> = ({ section, isExpanded, onToggle }) => {
-  return (
-    <View className="mb-4 mx-4 mt-4 bg-white rounded-xl overflow-hidden shadow-sm">
-      <TouchableOpacity 
-        onPress={onToggle}
-        className="flex-row justify-between items-center p-4"
-        activeOpacity={0.7}
-      >
-        <View className="flex-row items-center">
-          <View className="w-1.5 h-8 bg-primary rounded-full mr-3" />
-          <Text className="text-lg font-bold text-gray-800">{section.name}</Text>
-        </View>
-        <View className="w-8 h-8 rounded-full bg-gray-50 justify-center items-center">
-          <Ionicons 
-            name={isExpanded ? 'chevron-up' : 'chevron-down'} 
-            size={18} 
-            color="#666" 
-          />
-        </View>
-      </TouchableOpacity>
-
-      {isExpanded && (
-        <View>
-          {section.items.map((item, itemIndex) => (
-            <MenuItem 
-              key={`${item.name}-${itemIndex}`} 
-              item={item} 
-              isLast={itemIndex === section.items.length - 1}
-            />
-          ))}
-        </View>
-      )}
-    </View>
-  );
-};
-
-type MenuItemProps = {
-  item: MenuItemType;
-  isLast?: boolean;
-};
-
-const MenuItem: React.FC<MenuItemProps> = ({ item, isLast = false }) => {
-  const [showFullDetails, setShowFullDetails] = useState(false);
-
-  // Générer une couleur pour les badges diététiques
+  // Fonction pour obtenir les couleurs des badges diététiques
   const getDietColor = (diet: string) => {
     const colors = {
       'végétarien': ['bg-green-100', 'text-green-700'],
@@ -127,58 +48,94 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, isLast = false }) => {
     
     return colors[diet as keyof typeof colors] || ['bg-gray-100', 'text-gray-700'];
   };
-  
+
   return (
-    <>
-      <TouchableOpacity 
-        onPress={() => setShowFullDetails(true)}
-        className={`px-4 py-3 flex-1 ${!isLast ? 'border-b border-gray-100' : ''}`}
-        activeOpacity={0.6}
+    <View className="flex-1 bg-gray-50">
+      <Header />
+
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingTop: 50 }}
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => {
+          scrollY.value = event.nativeEvent.contentOffset.y;
+        }}
+        scrollEventThrottle={16}
       >
-        <View className="flex-row justify-between items-start">
-          <View className="flex-1 pr-2">
-            <Text className="text-base font-medium text-gray-800">{item.name}</Text>
-            
-            {/* Tags diététiques horizontaux */}
-            {item.dietary.length > 0 && (
-              <View className="flex-row flex-wrap mt-1">
-                {item.dietary.map((diet, index) => {
-                  const [bgColor, textColor] = getDietColor(diet);
-                  return (
-                    <View key={index} className={`${bgColor} rounded-full px-2 py-0.5 mr-1.5 mb-1`}>
-                      <Text className={`text-xs ${textColor}`}>
-                        {diet.charAt(0).toUpperCase() + diet.slice(1).replace('_', ' ')}
-                      </Text>
+        <Accordion type="multiple" defaultValue={menu.sections.map((s) => s.name)}>
+          {menu.sections.map((section, index) => (
+            <AccordionItem key={`${section.name}-${index}`} value={section.name}>
+              <AccordionTrigger
+                className="mx-4 mt-4 bg-primary/5 rounded-xl px-5 py-4 flex-row justify-between items-center"
+                style={{
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.06,
+                  shadowRadius: 10,
+                  elevation: 2,
+                }}
+              >
+                <View className="flex-row items-center">
+                  <View className="w-1.5 h-8 bg-primary/80 rounded-full mr-4" />
+                  <Text className="text-lg font-semibold text-gray-900">{section.name}</Text>
+                </View>
+              </AccordionTrigger>
+
+              <AccordionContent className="bg-white mt-2 mx-4 rounded-xl border border-gray-200">
+                {section.items.map((item, itemIndex) => (
+                  <TouchableOpacity
+                    key={`${item.name}-${itemIndex}`}
+                    onPress={() => setSelectedItem(item)}
+                    className={`px-5 py-4 ${itemIndex !== section.items.length - 1 ? 'border-b border-gray-200' : ''}`}
+                    activeOpacity={0.8}
+                  >
+                    <View className="flex-row justify-between items-start">
+                      <View className="flex-1 pr-3">
+                        <Text className="text-base font-medium text-gray-800">{item.name}</Text>
+                        
+                        <Text numberOfLines={2} className="text-sm text-gray-500 mt-1">
+                          {item.description}
+                        </Text>
+                        {/* Badges des régimes alimentaires */}
+                        {item.dietary.length > 0 && (
+                          <View className="flex-row flex-wrap mt-4 mb-1">
+                            {item.dietary.map((diet, dietIndex) => {
+                              const [bgColor, textColor] = getDietColor(diet);
+                              return (
+                                <View 
+                                  key={dietIndex} 
+                                  className={`${bgColor} rounded-full px-2.5 py-0.5 mr-1.5 mb-1`}
+                                >
+                                  <Text className={`text-xs ${textColor} font-medium`}>
+                                    {diet.charAt(0).toUpperCase() + diet.slice(1).replace('_', ' ')}
+                                  </Text>
+                                </View>
+                              );
+                            })}
+                          </View>
+                        )}
+                      </View>
+                      <View className="ml-3">
+                        <Text className="text-base font-bold text-primary">
+                          {item.price.value.toFixed(2)}{item.price.currency}
+                        </Text>
+                      </View>
                     </View>
-                  );
-                })}
-              </View>
-            )}
-            
-            {/* Description courte */}
-            <Text numberOfLines={2} className="text-sm text-gray-500 mt-1">
-              {item.description}
-            </Text>
-          </View>
-          
-          <View className="bg-gray-50 px-2.5 py-1.5 rounded-lg">
-            <Text className="text-base font-bold text-primary">
-              {item.price.value}{item.price.currency}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-      
-      {/* Modal pour afficher les détails complets */}
-      <Modal
-        visible={showFullDetails}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setShowFullDetails(false)}
-      >
-        <MenuItemDetails item={item} onClose={() => setShowFullDetails(false)} />
-      </Modal>
-    </>
+                  </TouchableOpacity>
+                ))}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+
+        <View className="h-24" />
+      </ScrollView>
+
+      <MenuFilters visible={false} onClose={() => {}} />
+      {selectedItem && (
+        <MenuItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+      )}
+    </View>
   );
 };
 
