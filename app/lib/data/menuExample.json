@@ -1,0 +1,662 @@
+{
+    "menu": {
+        "sections": [
+            {
+                "name": "ANTIPASTI",
+                "items": [
+                    {
+                        "name": "Bruschettas",
+                        "price": {
+                            "value": 8.0,
+                            "currency": "€"
+                        },
+                        "description": "Poire pochée, gorgonzola, noisettes/coeur de Burrata, asperges/Bufala, Speck, crème de balsamique et tomates confites",
+                        "ingredients": [
+                            "poire",
+                            "gorgonzola",
+                            "noisettes",
+                            "burrata",
+                            "asperges",
+                            "bufala",
+                            "speck",
+                            "balsamique",
+                            "tomates confites"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Légumes grillés marinés",
+                        "price": {
+                            "value": 7.0,
+                            "currency": "€"
+                        },
+                        "description": "Poivrons, tomates, aubergines, courgettes, artichauts marinés au Balsamico di Modena",
+                        "ingredients": [
+                            "poivrons",
+                            "tomates",
+                            "aubergines",
+                            "courgettes",
+                            "artichauts",
+                            "balsamique"
+                        ],
+                        "dietary": [
+                            "végétarien",
+                            "végétalien",
+                            "sans_gluten",
+                            "sans_lactose"
+                        ]
+                    },
+                    {
+                        "name": "Gorgonzola fondante",
+                        "price": {
+                            "value": 7.0,
+                            "currency": "€"
+                        },
+                        "description": "Gorgonzola fondante avec chutney de poire et balsamique blanc",
+                        "ingredients": [
+                            "gorgonzola",
+                            "poire",
+                            "balsamique blanc"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Mozzarella di Bufala",
+                        "price": {
+                            "value": 7.5,
+                            "currency": "€"
+                        },
+                        "description": "Servie avec nos huiles d'olive maison (125g)",
+                        "ingredients": [
+                            "mozzarella di bufala",
+                            "huile d'olive"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Mozzarella di Burrata",
+                        "price": {
+                            "value": 8.0,
+                            "currency": "€"
+                        },
+                        "description": "Servie avec nos huiles d'olive maison (125g)",
+                        "ingredients": [
+                            "burrata",
+                            "huile d'olive"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Rital cochonnailles",
+                        "price": {
+                            "value": 9.0,
+                            "currency": "€"
+                        },
+                        "description": "Assortiment de charcuteries italiennes",
+                        "ingredients": [
+                            "charcuteries italiennes"
+                        ],
+                        "dietary": []
+                    }
+                ]
+            },
+            {
+                "name": "INSALATE",
+                "items": [
+                    {
+                        "name": "Ave Caesar",
+                        "price": {
+                            "value": 12.5,
+                            "currency": "€"
+                        },
+                        "description": "Salade romaine, sauce caesar, pancetta grillée, suprême de volaille, oeuf poché, croûtons, parmesan",
+                        "ingredients": [
+                            "salade romaine",
+                            "sauce caesar",
+                            "pancetta",
+                            "volaille",
+                            "oeuf",
+                            "croûtons",
+                            "parmesan"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "La Prima Donna",
+                        "price": {
+                            "value": 12.5,
+                            "currency": "€"
+                        },
+                        "description": "Toast chaud de gorgonzola, noisettes grillées, chiffonade de Coppa, balsamique blanc, miel et huile d'olive",
+                        "ingredients": [
+                            "gorgonzola",
+                            "noisettes",
+                            "coppa",
+                            "balsamique blanc",
+                            "miel",
+                            "huile d'olive"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Verdure Burrata",
+                        "price": {
+                            "value": 13.0,
+                            "currency": "€"
+                        },
+                        "description": "Légumes marinés, Burrata, pignons de pain, pesto Genovese",
+                        "ingredients": [
+                            "légumes marinés",
+                            "burrata",
+                            "pignons de pin",
+                            "pesto"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "CARNE",
+                "items": [
+                    {
+                        "name": "Crazy Milanaise",
+                        "price": {
+                            "value": 20.0,
+                            "currency": "€"
+                        },
+                        "description": "Escalope de veau panée (noisettes, ail, oignons frits, thym, origan, persil)",
+                        "ingredients": [
+                            "veau",
+                            "noisettes",
+                            "ail",
+                            "oignons",
+                            "thym",
+                            "origan",
+                            "persil"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Tartare de boeuf",
+                        "price": {
+                            "value": 14.0,
+                            "currency": "€"
+                        },
+                        "description": "Boeuf Charolais au couteau, huile de noisette, tomates confites, persil, cornichons, pignons de pin, câpres, parmesan, frites maison, salade",
+                        "ingredients": [
+                            "boeuf charolais",
+                            "huile de noisette",
+                            "tomates confites",
+                            "persil",
+                            "cornichons",
+                            "pignons de pin",
+                            "câpres",
+                            "parmesan"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Carpaccio de boeuf",
+                        "price": {
+                            "value": 12.5,
+                            "currency": "€"
+                        },
+                        "description": "Huile d'olive, balsamique, roquette, parmesan, frites maison, salade",
+                        "ingredients": [
+                            "boeuf",
+                            "huile d'olive",
+                            "balsamique",
+                            "roquette",
+                            "parmesan"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Vitello tonnato",
+                        "price": {
+                            "value": 12.0,
+                            "currency": "€"
+                        },
+                        "description": "Quasi de veau en fines tranches, marinade au thon et aux anchois, huile d'olive",
+                        "ingredients": [
+                            "veau",
+                            "thon",
+                            "anchois",
+                            "huile d'olive"
+                        ],
+                        "dietary": []
+                    }
+                ]
+            },
+            {
+                "name": "PASTA",
+                "items": [
+                    {
+                        "name": "Caponata della Nonna",
+                        "price": {
+                            "value": 12.0,
+                            "currency": "€"
+                        },
+                        "description": "Pasta Rigate, confit de légumes, pignons de pin, amandes, raisins secs, coeur de Burrata",
+                        "ingredients": [
+                            "pâtes",
+                            "légumes",
+                            "pignons de pin",
+                            "amandes",
+                            "raisins secs",
+                            "burrata"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Rigatoni all'amatriciana",
+                        "price": {
+                            "value": 12.0,
+                            "currency": "€"
+                        },
+                        "description": "Tomates San Marzano D.O.P, pancetta, piments, fromage Pecorino di Amatrice",
+                        "ingredients": [
+                            "rigatoni",
+                            "tomates san marzano",
+                            "pancetta",
+                            "piments",
+                            "pecorino"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Fusilli giganti alla Puttanesca",
+                        "price": {
+                            "value": 12.0,
+                            "currency": "€"
+                        },
+                        "description": "Sauce piquante, tomates cerises, anchois, parmesan, mozzarella di Bufala",
+                        "ingredients": [
+                            "fusilli",
+                            "sauce piquante",
+                            "tomates cerises",
+                            "anchois",
+                            "parmesan",
+                            "mozzarella di bufala"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "La pâte à la truffe",
+                        "price": {
+                            "value": 14.0,
+                            "currency": "€"
+                        },
+                        "description": "Crème de truffe noire, crème, parmesan",
+                        "ingredients": [
+                            "pâtes",
+                            "truffe noire",
+                            "crème",
+                            "parmesan"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Pesto forever",
+                        "price": {
+                            "value": 14.0,
+                            "currency": "€"
+                        },
+                        "description": "Le vrai pesto de Genovese, coeur de Burrata",
+                        "ingredients": [
+                            "pâtes",
+                            "pesto",
+                            "burrata"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Gnocchi ai funghi, guanciale",
+                        "price": {
+                            "value": 13.0,
+                            "currency": "€"
+                        },
+                        "description": "Crème de champignons, joue de porc grillée, parmesan",
+                        "ingredients": [
+                            "gnocchi",
+                            "champignons",
+                            "joue de porc",
+                            "parmesan"
+                        ],
+                        "dietary": []
+                    }
+                ]
+            },
+            {
+                "name": "DOLCI",
+                "items": [
+                    {
+                        "name": "Pizzetta tressée au Nutella",
+                        "price": {
+                            "value": 7.0,
+                            "currency": "€"
+                        },
+                        "description": "Pizzetta tressée au Nutella",
+                        "ingredients": [
+                            "pâte à pizza",
+                            "nutella"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Tiramisu",
+                        "price": {
+                            "value": 7.0,
+                            "currency": "€"
+                        },
+                        "description": "Tiramisu traditionnel",
+                        "ingredients": [
+                            "mascarpone",
+                            "café",
+                            "biscuits",
+                            "cacao"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Baba au rhum",
+                        "price": {
+                            "value": 6.0,
+                            "currency": "€"
+                        },
+                        "description": "Baba au rhum, mousseline au limoncello",
+                        "ingredients": [
+                            "baba",
+                            "rhum",
+                            "crème",
+                            "limoncello"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Mousse al cioccolato della Nonna",
+                        "price": {
+                            "value": 6.0,
+                            "currency": "€"
+                        },
+                        "description": "Mousse au chocolat traditionnelle",
+                        "ingredients": [
+                            "chocolat",
+                            "oeufs",
+                            "crème"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Panna cotta",
+                        "price": {
+                            "value": 6.0,
+                            "currency": "€"
+                        },
+                        "description": "Panna cotta, soupe de fruits de saison",
+                        "ingredients": [
+                            "crème",
+                            "fruits de saison"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Café gourmand",
+                        "price": {
+                            "value": 8.0,
+                            "currency": "€"
+                        },
+                        "description": "Café accompagné de mignardises",
+                        "ingredients": [
+                            "café",
+                            "mignardises"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "PIZZE",
+                "items": [
+                    {
+                        "name": "Primargherita",
+                        "price": {
+                            "value": 11.0,
+                            "currency": "€"
+                        },
+                        "description": "Tomates San Marzano D.O.P, mozzarella, Bufala, basilic, olives Taggiasche",
+                        "ingredients": [
+                            "tomates san marzano",
+                            "mozzarella",
+                            "bufala",
+                            "basilic",
+                            "olives taggiasche"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Regina",
+                        "price": {
+                            "value": 12.5,
+                            "currency": "€"
+                        },
+                        "description": "Tomates San Marzano D.O.P, mozzarella Fior di Latte, champignons, jambon Rostello, olives",
+                        "ingredients": [
+                            "tomates san marzano",
+                            "mozzarella",
+                            "champignons",
+                            "jambon",
+                            "olives"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Tartufata",
+                        "price": {
+                            "value": 15.0,
+                            "currency": "€"
+                        },
+                        "description": "Mozzarella Fior di Latte, champignons, crème de truffe noire, parmesan, ciboulette",
+                        "ingredients": [
+                            "mozzarella",
+                            "champignons",
+                            "truffe noire",
+                            "parmesan",
+                            "ciboulette"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Veggie lovers",
+                        "price": {
+                            "value": 15.0,
+                            "currency": "€"
+                        },
+                        "description": "Tomates San Marzano D.O.P, mozzarella Fior di Latte, légumes marinés, Bufala, crème de balsamique, roquette",
+                        "ingredients": [
+                            "tomates san marzano",
+                            "mozzarella",
+                            "légumes marinés",
+                            "bufala",
+                            "balsamique",
+                            "roquette"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Cinque formaggi",
+                        "price": {
+                            "value": 15.5,
+                            "currency": "€"
+                        },
+                        "description": "Crème, mozzarella Fior di Latte, gorgonzola, Pecorino, Provolone, coeur de Burrata, roquette",
+                        "ingredients": [
+                            "crème",
+                            "mozzarella",
+                            "gorgonzola",
+                            "pecorino",
+                            "provolone",
+                            "burrata",
+                            "roquette"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Ô mon cochon",
+                        "price": {
+                            "value": 16.0,
+                            "currency": "€"
+                        },
+                        "description": "Crème, mozzarella Fior di Latte, champignons, Burrata, Guanciale (joue de porc)",
+                        "ingredients": [
+                            "crème",
+                            "mozzarella",
+                            "champignons",
+                            "burrata",
+                            "joue de porc"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "La Materazzi",
+                        "price": {
+                            "value": 14.0,
+                            "currency": "€"
+                        },
+                        "description": "Tomates San Marzano D.O.P, mozzarella Fior di Latte, Speck, pignons de pin, parmesan, crème de balsamique, roquette",
+                        "ingredients": [
+                            "tomates san marzano",
+                            "mozzarella",
+                            "speck",
+                            "pignons de pin",
+                            "parmesan",
+                            "balsamique",
+                            "roquette"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Cicciolina",
+                        "price": {
+                            "value": 13.0,
+                            "currency": "€"
+                        },
+                        "description": "Tomates San Marzano D.O.P, mozzarella Fior di Latte, poivrons, Spianata Calabrese (saucisson piquant), roquette, crème de balsamique",
+                        "ingredients": [
+                            "tomates san marzano",
+                            "mozzarella",
+                            "poivrons",
+                            "saucisson piquant",
+                            "roquette",
+                            "balsamique"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Courgettes with love",
+                        "price": {
+                            "value": 12.5,
+                            "currency": "€"
+                        },
+                        "description": "Crème, mozzarella Fior di Latte, courgettes, crème de balsamique, coeur de Burrata, graines de courge, fromage Pecorino",
+                        "ingredients": [
+                            "crème",
+                            "mozzarella",
+                            "courgettes",
+                            "balsamique",
+                            "burrata",
+                            "graines de courge",
+                            "pecorino"
+                        ],
+                        "dietary": [
+                            "végétarien"
+                        ]
+                    },
+                    {
+                        "name": "Red Hot Chili Biquette",
+                        "price": {
+                            "value": 13.5,
+                            "currency": "€"
+                        },
+                        "description": "Crème, mozzarella Fior di Latte, salame piccante, ricotta de brebis, oignons rouges",
+                        "ingredients": [
+                            "crème",
+                            "mozzarella",
+                            "salami piquant",
+                            "ricotta",
+                            "oignons rouges"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "Buffalo Bufala",
+                        "price": {
+                            "value": 15.0,
+                            "currency": "€"
+                        },
+                        "description": "Tomates San Marzano D.O.P, mozzarella Fior di Latte, boeuf, Bufala, basilic, œuf poché",
+                        "ingredients": [
+                            "tomates san marzano",
+                            "mozzarella",
+                            "boeuf",
+                            "bufala",
+                            "basilic",
+                            "oeuf"
+                        ],
+                        "dietary": []
+                    },
+                    {
+                        "name": "La Reine des truffes",
+                        "price": {
+                            "value": 18.0,
+                            "currency": "€"
+                        },
+                        "description": "Mozzarella Fior di Latte, crème de truffe noire, champignons, jambon aux truffes, pignons de pin",
+                        "ingredients": [
+                            "mozzarella",
+                            "truffe noire",
+                            "champignons",
+                            "jambon aux truffes",
+                            "pignons de pin"
+                        ],
+                        "dietary": []
+                    }
+                ]
+            }
+        ]
+    }
+}

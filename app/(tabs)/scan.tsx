@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import CameraViewComponent from '../components/scan/CameraView';
+import MenuResult from '../components/menu/MenuResult';
 
 type RootStackParamList = {
   Home: undefined;
@@ -47,29 +48,6 @@ const Scan = () => {
   const handlePhotoTaken = (uri: string) => {
     setCapturedImage(uri);
     setShowCamera(false);
-    
-    // Afficher l'alerte après la capture
-    Alert.alert(
-      'Photo capturée!', 
-      'Votre menu a été scanné avec succès.',
-      [
-        {
-          text: 'Nouvelle photo',
-          onPress: () => {
-            setShowCamera(true);
-            setCapturedImage(null);
-          }
-        },
-        {
-          text: 'Analyser',
-          onPress: () => {
-            // Logique d'analyse du menu
-            console.log('Analyse du menu:', uri);
-            Alert.alert('Analyse', 'Fonctionnalité en cours de développement');
-          }
-        }
-      ]
-    );
   };
 
   // Afficher directement la caméra
@@ -82,52 +60,16 @@ const Scan = () => {
     );
   }
 
-  // Afficher l'image capturée si elle existe
+  // Afficher le résultat du menu si une image a été capturée
   if (capturedImage) {
     return (
-      <SafeAreaView className="flex-1 bg-white">
-        <View className="flex-1 justify-center items-center p-6">
-          <View className="w-full items-center">
-            <View className="w-full h-80 rounded-xl overflow-hidden shadow-lg mb-6 bg-gray-100">
-              <Image 
-                source={{ uri: capturedImage }}
-                className="w-full h-full"
-                resizeMode="contain"
-              />
-            </View>
-            
-            <Text className="text-xl font-bold text-primary mb-2">
-              Menu scanné !
-            </Text>
-            <Text className="text-gray-600 text-center mb-8">
-              Votre photo a été capturée avec succès
-            </Text>
-
-            <View className="flex-row space-x-4">
-              <TouchableOpacity 
-                className="bg-gray-100 px-6 py-3 rounded-full border border-gray-300"
-                onPress={() => {
-                  setShowCamera(true);
-                  setCapturedImage(null);
-                }}
-                activeOpacity={0.7}
-              >
-                <Text className="text-gray-700 font-medium">Nouvelle photo</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity 
-                className="bg-primary px-6 py-3 rounded-full"
-                onPress={() => {
-                  Alert.alert('Analyse', 'Fonctionnalité en cours de développement');
-                }}
-                activeOpacity={0.7}
-              >
-                <Text className="text-white font-medium">Analyser</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </SafeAreaView>
+      <MenuResult 
+        imageUri={capturedImage} 
+        onClose={() => {
+          setShowCamera(true);
+          setCapturedImage(null);
+        }} 
+      />
     );
   }
 
