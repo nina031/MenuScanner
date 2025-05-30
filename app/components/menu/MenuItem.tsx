@@ -197,20 +197,6 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, onClose }) => {
               </Animated.View>
             )}
 
-            {/* Informations nutritionnelles (simulées) */}
-            <Animated.View 
-              entering={FadeIn.delay(500).springify()}
-              className="px-5 pt-5"
-            >
-              <View className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-4">
-                <View className="flex-row items-center mb-2">
-                  <Ionicons name="information-circle-outline" size={20} color="#129EA1" />
-                  <Text className="text-sm text-gray-600 ml-2">
-                    Les informations nutritionnelles seront bientôt disponibles
-                  </Text>
-                </View>
-              </View>
-            </Animated.View>
           </ScrollView>
         </Animated.View>
       </View>
