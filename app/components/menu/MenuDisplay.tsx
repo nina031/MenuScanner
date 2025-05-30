@@ -1,27 +1,28 @@
 // app/components/menu/MenuDisplay.tsx
-import React from 'react';
-import { View, ScrollView, Dimensions, Text, TouchableOpacity, Pressable } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { 
+  View, 
+  ScrollView, 
+  Text, 
+  TouchableOpacity, 
+  StatusBar,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import DietaryBadges from './DietaryBadges';
 import Animated, {
-  useAnimatedStyle,
   useSharedValue,
-  interpolate,
-  Extrapolate,
+  FadeIn,
+  FadeInDown
 } from 'react-native-reanimated';
 import Header from '../Header';
 import MenuItemModal from './MenuItem';
-import MenuFilters from './MenuFilters';
-import { Menu } from '../../types/menu';
+import { Menu, MenuItem as MenuItemType } from '../../types/menu';
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from '../ui/accordion';
-import { MenuItem as MenuItemType } from '../../types/menu';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 type MenuDisplayProps = {
   menu: Menu;
@@ -29,93 +30,115 @@ type MenuDisplayProps = {
 };
 
 const MenuDisplay: React.FC<MenuDisplayProps> = ({ menu }) => {
-  const [selectedItem, setSelectedItem] = React.useState<MenuItemType | null>(null);
+  const [selectedItem, setSelectedItem] = useState<MenuItemType | null>(null);
   const scrollY = useSharedValue(0);
 
   return (
-    <View className="flex-1 bg-gray-50">
+    <View className="flex-1 bg-white">
+      <StatusBar barStyle="dark-content" />
       <Header />
-
-
 
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingTop: 10 }}
         showsVerticalScrollIndicator={false}
         onScroll={(event) => {
           scrollY.value = event.nativeEvent.contentOffset.y;
         }}
         scrollEventThrottle={16}
       >
+        {/* Header du restaurant */}
         <View className="px-4 pt-6 pb-4 items-center">
-          <Text className="text-3xl font-bold text-gray-900">{menu.name}</Text>
+          <Text className="text-3xl text-gray-900 font-light tracking-wider">
+            {menu.name}
+          </Text>
           <View className="h-0.5 w-32 bg-primary/30 rounded-full mt-2" />
+          
+          {/* Stats du menu */}
+          <View className="flex-row items-center mt-4">
+            <View className="flex-row items-center">
+              <Ionicons name="restaurant-outline" size={16} color="#6B7280" />
+              <Text className="text-sm text-gray-600 ml-1">
+                {menu.sections.reduce((acc, section) => acc + section.items.length, 0)} plats
+              </Text>
+            </View>
+            <View className="w-0.5 h-4 bg-gray-300 rounded-full mx-4" />
+            <View className="flex-row items-center">
+              <Ionicons name="leaf-outline" size={16} color="#10B981" />
+              <Text className="text-sm text-gray-600 ml-1">Options végé</Text>
+            </View>
+          </View>
         </View>
-        <Accordion type="multiple" defaultValue={menu.sections.map((s) => s.name)}>
-          {menu.sections.map((section, index) => (
-            <AccordionItem key={`${section.name}-${index}`} value={section.name}>
-              <AccordionTrigger
-                className="mx-4 mt-4 bg-primary/15 rounded-xl px-5 py-4 flex-row justify-between items-center"
-                style={{
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.06,
-                  shadowRadius: 10,
-                  elevation: 2,
-                }}
-              >
-                <View className="flex-row items-center">
-                  <View className="w-1.5 h-8 bg-primary/80 rounded-full mr-4" />
-                  <Text className="text-lg font-semibold text-gray-900">{section.name}</Text>
-                </View>
-              </AccordionTrigger>
 
-              <AccordionContent className="mt-4 mx-4 -space-y-2">
-                {section.items.map((item, itemIndex) => (
-                  <TouchableOpacity
-                    key={`${item.name}-${itemIndex}`}
-                    className="px-5 py-3.5 bg-white rounded-lg border border-gray-100 active:bg-gray-50 my-1"
-                    style={{
-                      shadowColor: '#000',
-                      shadowOffset: { width: 0, height: 1 },
-                      shadowOpacity: 0.05,
-                      shadowRadius: 3,
-                      elevation: 2
-                    }}
-                    onPress={() => setSelectedItem(item)}
-                    activeOpacity={0.9}
-                  >
-                    <View className="flex-row justify-between items-start">
-                      <View className="flex-1 pr-4">
-                        <Text className="text-base font-medium text-gray-800">{item.name}</Text>
-                        <Text numberOfLines={2} className="text-sm text-gray-500 mt-1">
-                          {item.description}
-                        </Text>
-                      </View>
-                      <Text className="text-base font-bold text-primary">
-                        {item.price.value.toFixed(2)}{item.price.currency}
+        {/* Sections avec Accordion */}
+        <View className="px-4 pb-20">
+          <Accordion type="multiple" defaultValue={menu.sections.map((s) => s.name)}>
+            {menu.sections.map((section, sectionIndex) => (
+              <Animated.View
+                key={`${section.name}-${sectionIndex}`}
+                entering={FadeInDown.delay(sectionIndex * 100).springify()}
+              >
+                <AccordionItem value={section.name}>
+                  <AccordionTrigger className="my-2 bg-primary/15 rounded-xl px-5 py-4 border border-gray-100">
+                    <View className="flex-row items-center justify-between flex-1">
+                      <Text className="text-lg font-semibold text-gray-900 tracking-wide">
+                        {section.name}
                       </Text>
                     </View>
+                  </AccordionTrigger>
 
-                    {item.dietary.length > 0 && (
-                      <View className="mt-6">
-                        <DietaryBadges
-                          dietary={item.dietary}
-                          containerClassName="flex-row flex-wrap"
-                        />
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                ))}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+                  <AccordionContent className="mt-3">
+                    {section.items.map((item, itemIndex) => (
+                      <Animated.View
+                        key={`${item.name}-${itemIndex}`}
+                        entering={FadeIn.delay(itemIndex * 50).springify()}
+                        className="mb-3"
+                      >
+                        <TouchableOpacity
+                          onPress={() => setSelectedItem(item)}
+                          activeOpacity={0.98}
+                          className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"
+                        >
+                          <View className="p-4">
+                            {/* En-tête du plat avec prix */}
+                            <View className="flex-row justify-between items-start mb-2">
+                              <View className="flex-1 pr-3">
+                                <Text className="text-base font-medium text-gray-800">
+                                  {item.name}
+                                </Text>
+                              </View>
+                              <Text className="text-base font-bold text-primary">
+                                {item.price.value.toFixed(2)}{item.price.currency}
+                              </Text>
+                            </View>
 
-        <View className="h-24" />
+                            {/* Description */}
+                            <Text 
+                              numberOfLines={2} 
+                              className="text-sm text-gray-600 leading-5 mb-3"
+                            >
+                              {item.description}
+                            </Text>
+
+                            {/* Badges diététiques */}
+                            {item.dietary.length > 0 && (
+                              <DietaryBadges
+                                dietary={item.dietary}
+                                containerClassName="flex-row flex-wrap"
+                                variant="simple"
+                              />
+                            )}
+                          </View>
+                        </TouchableOpacity>
+                      </Animated.View>
+                    ))}
+                  </AccordionContent>
+                </AccordionItem>
+              </Animated.View>
+            ))}
+          </Accordion>
+        </View>
       </ScrollView>
 
-      <MenuFilters visible={false} onClose={() => {}} />
       {selectedItem && (
         <MenuItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />
       )}
