@@ -2,8 +2,9 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
-import MenuResultWebSocket from '../components/menu/MenuResultWebSocket';
 import CameraViewComponent from '../components/scan/CameraView';
+import MenuViewer from '../components/menu/MenuViewer';
+import { useWebSocketScan } from '../hooks/useWebSocketScan';
 
 type RootStackParamList = {
   Home: undefined;
@@ -15,6 +16,12 @@ const Scan = () => {
   const navigation = useNavigation<ScanScreenNavigationProp>();
   const [showCamera, setShowCamera] = useState(true);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  
+  // Hook pour gérer le scan WebSocket
+  const { isScanning } = useWebSocketScan({ 
+    imageUri: capturedImage || undefined, 
+    onError: handleClose 
+  });
 
   // Masquer la tabBar pour cet écran
   useLayoutEffect(() => {
@@ -48,11 +55,11 @@ const Scan = () => {
     setShowCamera(false);
   };
 
-  const handleClose = () => {
+  function handleClose() {
     setShowCamera(true);
     setCapturedImage(null);
     navigation.goBack();
-  };
+  }
 
   // Afficher directement la caméra
   if (showCamera) {
@@ -64,14 +71,9 @@ const Scan = () => {
     );
   }
 
-  // Afficher la version debug si une image a été capturée
+  // Afficher MenuViewer si une image a été capturée
   if (capturedImage) {
-    return (
-      <MenuResultWebSocket 
-        imageUri={capturedImage} 
-        onClose={handleClose} 
-      />
-    );
+    return <MenuViewer onClose={handleClose} />;
   }
 
   // Par défaut, afficher la caméra
