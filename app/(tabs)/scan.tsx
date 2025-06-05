@@ -1,11 +1,9 @@
 // app/(tabs)/scan.tsx
-import React, { useState, useCallback, useLayoutEffect } from 'react';
-import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
+import MenuResultWebSocket from '../components/menu/MenuResultWebSocket';
 import CameraViewComponent from '../components/scan/CameraView';
-import MenuResult from '../components/menu/MenuResult';
 
 type RootStackParamList = {
   Home: undefined;
@@ -50,25 +48,28 @@ const Scan = () => {
     setShowCamera(false);
   };
 
+  const handleClose = () => {
+    setShowCamera(true);
+    setCapturedImage(null);
+    navigation.goBack();
+  };
+
   // Afficher directement la caméra
   if (showCamera) {
     return (
       <CameraViewComponent 
         onPhotoTaken={handlePhotoTaken}
-        onClose={() => navigation.goBack()}
+        onClose={handleClose}
       />
     );
   }
 
-  // Afficher le résultat du menu si une image a été capturée
+  // Afficher la version debug si une image a été capturée
   if (capturedImage) {
     return (
-      <MenuResult 
+      <MenuResultWebSocket 
         imageUri={capturedImage} 
-        onClose={() => {
-          setShowCamera(true);
-          setCapturedImage(null);
-        }} 
+        onClose={handleClose} 
       />
     );
   }
@@ -77,9 +78,9 @@ const Scan = () => {
   return (
     <CameraViewComponent 
       onPhotoTaken={handlePhotoTaken}
-      onClose={() => navigation.goBack()}
+      onClose={handleClose}
     />
   );
 };
 
-export default Scan;  
+export default Scan;
