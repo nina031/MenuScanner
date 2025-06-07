@@ -21,8 +21,13 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
     resetMenu
   } = useMenuStore();
   
-  // Refs pour éviter les multiples traitements
-  const isProcessingRef = useRef(false);
+  // État de traitement plus robuste
+  const processingState = useRef({
+    isProcessing: false,
+    currentScanId: null as string | null,
+    connectionId: null as string | null,
+    imageUri: null as string | null
+  });
   const isMountedRef = useRef(true);
 
   useEffect(() => {
@@ -30,6 +35,7 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
     
     return () => {
       isMountedRef.current = false;
+      // Déconnecter WebSocket mais garder le menu
       webSocketService.disconnect();
     };
   }, []);
@@ -46,6 +52,7 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
         if (!isMountedRef.current) return;
         console.log('🚀 Traitement démarré');
         if (scanIdReceived) {
+          processingState.current.currentScanId = scanIdReceived;
           setScanId(scanIdReceived);
         }
       },
@@ -58,10 +65,18 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
         }
       },
 
-      onSectionsDetected: (title, sections, scanIdReceived) => {
+      onMenuTitle: (title, scanIdReceived) => {
+        if (!isMountedRef.current) return;
+        console.log('🏪 Titre du menu reçu:', title);
+        setMenuTitle(title || 'Menu');
+        if (scanIdReceived) {
+          setScanId(scanIdReceived);
+        }
+      },
+
+      onSectionsDetected: (sections, scanIdReceived) => {
         if (!isMountedRef.current) return;
         console.log('📋 Sections détectées:', sections);
-        setMenuTitle(title || 'Menu');
         setDetectedSections(sections);
         if (scanIdReceived) {
           setScanId(scanIdReceived);
@@ -84,6 +99,9 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
         console.log('✅ Traitement terminé en', time, 'secondes');
         setLoading(false);
         setComplete(true);
+        // Reset état de traitement
+        processingState.current.isProcessing = false;
+        processingState.current.currentScanId = null;
         if (scanIdReceived) {
           setScanId(scanIdReceived);
         }
@@ -94,21 +112,37 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
         console.error('❌ Erreur WebSocket:', message);
         setError(message);
         setLoading(false);
-        isProcessingRef.current = false;
+        // Reset état de traitement
+        processingState.current.isProcessing = false;
+        processingState.current.currentScanId = null;
         if (scanIdReceived) {
           setScanId(scanIdReceived);
         }
       },
     });
-  }, [addCompletedSection, setMenuTitle, setDetectedSections, setLoading, setComplete, setError, setScanId]);
+  }, []); // Dépendances vides pour éviter les re-créations
 
   // Démarrage du traitement
   useEffect(() => {
-    if (!imageUri || isProcessingRef.current) return;
+    if (!imageUri) return;
+    
+    // Protection robuste contre les multiples traitements
+    if (processingState.current.isProcessing) {
+      console.log('⚠️ Traitement déjà en cours, ignoré', processingState.current);
+      return;
+    }
+    
+    // Éviter de traiter la même image plusieurs fois
+    if (processingState.current.imageUri === imageUri) {
+      console.log('⚠️ Image déjà en cours de traitement, ignoré');
+      return;
+    }
 
     const startProcessing = async () => {
-      if (isProcessingRef.current) return;
-      isProcessingRef.current = true;
+      if (processingState.current.isProcessing) return;
+      
+      processingState.current.isProcessing = true;
+      processingState.current.imageUri = imageUri;
 
       try {
         // Reset complet de l'état
@@ -117,10 +151,17 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
         // Configurer les handlers
         setupWebSocketHandlers();
         
+        // Activer temporairement le mode démo pour éviter les logs d'erreur
+        webSocketService.setDemoMode(true);
+        
         // Connecter WebSocket
         const connectionId = await webSocketService.connect();
         if (!isMountedRef.current) return;
         
+        // Désactiver le mode démo si connexion réussie
+        webSocketService.setDemoMode(false);
+        
+        processingState.current.connectionId = connectionId;
         console.log('✅ WebSocket connecté avec ID:', connectionId);
         
         // Démarrer le traitement
@@ -137,16 +178,52 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
       } catch (error) {
         if (!isMountedRef.current) return;
         
-        console.error('❌ Erreur de traitement:', error);
-        
+        // Ne pas logger l'erreur si on va basculer en mode démo
         let errorMessage = 'Erreur lors du traitement du menu';
         if (error instanceof Error) {
           errorMessage = error.message;
         }
         
+        const isConnectionError = errorMessage.includes('Network') || 
+                                 errorMessage.includes('fetch') ||
+                                 errorMessage.includes('Connection') ||
+                                 errorMessage.includes('connexion') ||
+                                 errorMessage.includes('WebSocket') ||
+                                 errorMessage.includes('ECONNREFUSED') ||
+                                 errorMessage.includes('Connection refused') ||
+                                 error instanceof TypeError;
+        
+        if (!isConnectionError) {
+          console.error('❌ Erreur de traitement:', error);
+        }
+        
+        if (isConnectionError) {
+          console.log('🔄 Backend indisponible, basculement vers le mode démo');
+          
+          // Le mode démo est déjà activé, on garde cet état
+          
+          // Reset des erreurs d'abord
+          setError(null);
+          
+          // Utiliser le menu d'exemple au lieu d'afficher une erreur
+          const { loadExampleMenu } = useMenuStore.getState();
+          loadExampleMenu();
+          
+          // Reset état de traitement
+          processingState.current.isProcessing = false;
+          processingState.current.currentScanId = null;
+          processingState.current.imageUri = null;
+          
+          return; // Pas d'alerte d'erreur, on utilise l'exemple
+        }
+        
+        // Pour les autres erreurs, comportement normal
         setError(errorMessage);
         setLoading(false);
-        isProcessingRef.current = false;
+        // Reset état de traitement
+        processingState.current.isProcessing = false;
+        processingState.current.currentScanId = null;
+        processingState.current.imageUri = null;
         
         Alert.alert(
           'Erreur de traitement',
@@ -157,7 +234,7 @@ export const useWebSocketScan = ({ imageUri, onError }: UseWebSocketScanProps) =
     };
 
     startProcessing();
-  }, [imageUri, onError, setupWebSocketHandlers, resetMenu, setError, setLoading, setScanId]);
+  }, [imageUri]); // Seule dépendance nécessaire
 
   // Return scan status for external usage if needed
   const { loading, error, currentMenu, menuState } = useMenuStore();

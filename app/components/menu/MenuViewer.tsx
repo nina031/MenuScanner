@@ -4,10 +4,10 @@ import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../Header';
 import { Accordion } from '../ui/accordion';
-import { useMenuFilters } from '../../hooks/useMenuFilters';
-import { useMenuStore } from '../../stores/MenuStore';
+import { useMenuFilters } from '../../../src/hooks/useMenuFilters';
+import { useMenuStore } from '../../../src/stores/MenuStore';
 import MenuFilters from './MenuFilters';
-import { MenuItem as MenuItemType } from '../../types/menu';
+import { MenuItem as MenuItemType } from '../../../src/types/menu';
 import MenuItemModal from './MenuItem';
 import MenuSection from './MenuSection';
 import MenuSectionSkeleton from './MenuSectionSkeleton';
@@ -24,6 +24,7 @@ const MenuViewer: React.FC<MenuViewerProps> = ({ onClose }) => {
     currentMenu, 
     menuState, 
     menuSource,
+    menuTitle,
     detectedSections, 
     completedSections, 
     loading, 
@@ -39,8 +40,8 @@ const MenuViewer: React.FC<MenuViewerProps> = ({ onClose }) => {
   const { filteredSections, totalFilteredItems, hasActiveFilters } = useMenuFilters(sectionsToFilter);
 
 
-  // Écran d'erreur
-  if (error) {
+  // Écran d'erreur (sauf pour le mode démo)
+  if (error && !error.includes('Mode démo')) {
     return (
       <View className="flex-1 justify-center items-center bg-white p-4">
         <View className="w-20 h-20 bg-red-100 rounded-full items-center justify-center mb-4">
@@ -61,12 +62,27 @@ const MenuViewer: React.FC<MenuViewerProps> = ({ onClose }) => {
     );
   }
 
+  // Écran de chargement centré jusqu'à ce qu'on ait le titre
+  if (!menuTitle && loading) {
+    return (
+      <View className="flex-1 bg-white justify-center items-center">
+        <ActivityIndicator size="large" color="#129EA1" />
+        <Text className="mt-4 text-lg text-gray-700 text-center font-medium">
+          Veuillez patienter
+        </Text>
+        <Text className="mt-2 text-gray-500 text-center">
+          Analyse du menu en cours...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 bg-gray-50">
       <Header 
         onRightPress={() => setShowFilters(true)}
-        filteredItemsCount={totalFilteredItems}
-        hasActiveFilters={hasActiveFilters}
+        filteredItemsCount={typeof totalFilteredItems === 'number' ? totalFilteredItems : 0}
+        hasActiveFilters={Boolean(hasActiveFilters)}
       />
 
       <ScrollView
@@ -74,16 +90,28 @@ const MenuViewer: React.FC<MenuViewerProps> = ({ onClose }) => {
         contentContainerStyle={{ paddingTop: 10 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Titre du menu */}
-        <View className="px-4 pt-6 pb-4 items-center">
-          <Text className="text-3xl text-gray-900 font-light tracking-wider">
-            {currentMenu?.name || 'Menu'}
-          </Text>
-          <View className="h-0.5 w-32 bg-primary/30 rounded-full mt-2" />
-        </View>
+        {/* Titre du menu - une seule fois au début */}
+        {(menuState === 'complete' || menuState === 'streaming' || menuState === 'analyzing') && (
+          <View className="px-4 pt-6 pb-4 items-center">
+            <Text className="text-3xl text-gray-900 font-light tracking-wider">
+              {currentMenu?.name || menuTitle}
+            </Text>
+            <View className="h-0.5 w-32 bg-primary/30 rounded-full mt-2" />
+            
+            {/* Badge mode démo */}
+            {error && error.includes('Mode démo') && (
+              <View className="mt-2 px-2 py-0.5 bg-gray-100 border border-gray-200 rounded-md">
+                <Text className="text-gray-600 text-xs">
+                  {error}
+                </Text>
+              </View>
+            )}
+            
+          </View>
+        )}
         
-        {/* Menu complet (récents) */}
-        {menuState === 'complete' && currentMenu && (
+        {/* Menu complet (récents ou terminé) */}
+        {(menuState === 'complete' || (currentMenu && !loading)) && currentMenu && (
           <Accordion type="multiple" defaultValue={filteredSections.map((s) => s.name)}>
             {filteredSections.map((section, index) => (
               <MenuSection
@@ -124,18 +152,9 @@ const MenuViewer: React.FC<MenuViewerProps> = ({ onClose }) => {
           </Accordion>
         )}
 
-        {/* Indicateur de chargement initial */}
-        {loading && (!currentMenu || currentMenu.sections.length === 0) && (
-          <View className="flex-1 justify-center items-center p-8">
-            <ActivityIndicator size="large" color="#129EA1" />
-            <Text className="mt-3 text-gray-500 text-center">
-              {menuSource === 'scan' ? 'Analyse du menu en cours...' : 'Chargement du menu...'}
-            </Text>
-          </View>
-        )}
 
         {/* Aucun résultat avec filtres */}
-        {menuState === 'complete' && filteredSections.length === 0 && currentMenu && currentMenu.sections.length > 0 && (
+        {(menuState === 'complete' || (currentMenu && !loading)) && filteredSections.length === 0 && currentMenu && currentMenu.sections.length > 0 && (
           <View className="flex-1 justify-center items-center p-8">
             <View className="w-20 h-20 bg-gray-100 rounded-full items-center justify-center mb-4">
               <Ionicons name="search-outline" size={40} color="#9CA3AF" />

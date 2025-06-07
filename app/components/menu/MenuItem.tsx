@@ -2,19 +2,14 @@
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Modal, Dimensions, Pressable } from 'react-native';
 import DietaryBadges from './DietaryBadges';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MenuItem } from '../../types/menu';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MenuItem } from '../../../src/types/menu';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { 
   FadeIn, 
-  FadeOut,
-  SlideInDown, 
-  SlideOutDown,
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
-  runOnJS
 } from 'react-native-reanimated';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '../ui/accordion';
-import { MenuSection as MenuSectionType, MenuItem as MenuItemType } from '../../types/menu';
+import { MenuSection as MenuSectionType, MenuItem as MenuItemType } from '../../../src/types/menu';
 import DietaryBadges from './DietaryBadges';
 
 type MenuSectionProps = {

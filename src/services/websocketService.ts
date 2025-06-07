@@ -2,7 +2,7 @@
 import { MenuSection } from '../types/menu';
 
 interface WebSocketMessage {
-  type: 'connected' | 'processing_started' | 'progress' | 'sections_detected' | 'section_complete' | 'complete' | 'error';
+  type: 'connected' | 'processing_started' | 'progress' | 'menu_title' | 'sections_detected' | 'section_complete' | 'complete' | 'error';
   connection_id?: string;
   scan_id?: string;
   message?: string;
@@ -19,7 +19,8 @@ interface WebSocketEventHandlers {
   onConnected?: (connectionId: string) => void;
   onProcessingStarted?: (scanId?: string) => void;
   onProgress?: (step: string, message: string, scanId?: string) => void;
-  onSectionsDetected?: (menuTitle: string, sections: string[], scanId?: string) => void;
+  onMenuTitle?: (menuTitle: string, scanId?: string) => void;
+  onSectionsDetected?: (sections: string[], scanId?: string) => void;
   onSectionComplete?: (section: MenuSection, current: number, total: number, scanId?: string) => void;
   onComplete?: (processingTime: number, scanId?: string) => void;
   onError?: (message: string, scanId?: string) => void;
@@ -42,6 +43,7 @@ class WebSocketService {
   private eventHandlers: WebSocketEventHandlers = {};
   private isConnecting = false;
   private shouldReconnect = true;
+  private demoMode = false;
 
   private get wsUrl(): string {
     return __DEV__ 
@@ -59,11 +61,14 @@ class WebSocketService {
     console.log('🚀 WebSocketService.connect() appelé');
     
     // Éviter les connexions multiples
-    if (this.isConnecting || this.isConnected()) {
-      console.log('⚠️ Déjà connecté ou en cours de connexion');
-      if (this.connectionId) {
-        return this.connectionId;
-      }
+    if (this.isConnecting) {
+      console.log('⚠️ Connexion déjà en cours, attente...');
+      throw new Error('Connexion WebSocket déjà en cours');
+    }
+    
+    if (this.isConnected() && this.connectionId) {
+      console.log('⚠️ Déjà connecté avec ID:', this.connectionId);
+      return this.connectionId;
     }
 
     this.isConnecting = true;
@@ -83,8 +88,9 @@ class WebSocketService {
         const timeout = setTimeout(() => {
           console.log('⏰ Timeout connexion WebSocket');
           this.isConnecting = false;
+          this.ws?.close();
           reject(new Error('Timeout de connexion WebSocket'));
-        }, 15000);
+        }, 30000); // Augmenté à 30 secondes
 
         this.ws.onopen = () => {
           console.log('✅ WebSocket.onopen déclenché');
@@ -112,19 +118,23 @@ class WebSocketService {
         };
 
         this.ws.onerror = (error) => {
-          console.error('❌ WebSocket.onerror:', error);
+          if (!this.demoMode) {
+            console.error('❌ WebSocket.onerror:', error);
+          }
           this.isConnecting = false;
           clearTimeout(timeout);
           reject(new Error('Erreur de connexion WebSocket'));
         };
 
         this.ws.onclose = (event) => {
-          console.log('🔌 WebSocket.onclose:', event.code, event.reason);
+          if (!this.demoMode) {
+            console.log('🔌 WebSocket.onclose:', event.code, event.reason);
+          }
           this.isConnecting = false;
           this.connectionId = null;
           clearTimeout(timeout);
           
-          if (this.shouldReconnect) {
+          if (this.shouldReconnect && !this.demoMode) {
             this.eventHandlers.onError?.('Connexion WebSocket fermée');
           }
         };
@@ -161,10 +171,17 @@ class WebSocketService {
         );
         break;
 
+      case 'menu_title':
+        console.log('🏪 Handler menu_title:', message.menu_title);
+        this.eventHandlers.onMenuTitle?.(
+          message.menu_title!,
+          message.scan_id
+        );
+        break;
+
       case 'sections_detected':
         console.log('📋 Handler sections_detected:', message.sections?.length, 'sections');
         this.eventHandlers.onSectionsDetected?.(
-          message.menu_title!,
           message.sections!,
           message.scan_id
         );
@@ -296,6 +313,11 @@ class WebSocketService {
 
   getConnectionId(): string | null {
     return this.connectionId;
+  }
+
+  setDemoMode(enabled: boolean) {
+    this.demoMode = enabled;
+    console.log('🎮 Mode démo WebSocket:', enabled ? 'ACTIVÉ' : 'DÉSACTIVÉ');
   }
 }
 

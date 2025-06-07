@@ -4,7 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import CameraViewComponent from '../components/scan/CameraView';
 import MenuViewer from '../components/menu/MenuViewer';
-import { useWebSocketScan } from '../hooks/useWebSocketScan';
+import { useWebSocketScan } from '../../src/hooks/useWebSocketScan';
 
 type RootStackParamList = {
   Home: undefined;

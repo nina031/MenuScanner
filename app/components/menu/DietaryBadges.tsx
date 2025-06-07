@@ -26,23 +26,17 @@ const DietaryBadges: React.FC<DietaryBadgesProps> = ({
         label: 'Végétarien',
         simpleStyle: ['bg-green-100', 'text-green-700']
       },
-      'végétalien': {
+      'vegan': {
         colors: ['#14B8A6', '#0D9488'] as const,
         icon: 'sprout',
-        label: 'Végétalien',
+        label: 'Vegan',
         simpleStyle: ['bg-teal-100', 'text-teal-700']
       },
-      'sans_gluten': {
-        colors: ['#F59E0B', '#D97706'] as const,
-        icon: 'barley-off',
-        label: 'Sans gluten',
-        simpleStyle: ['bg-amber-100', 'text-amber-700']
-      },
-      'sans_lactose': {
-        colors: ['#3B82F6', '#2563EB'] as const,
-        icon: 'cow-off',
-        label: 'Sans lactose',
-        simpleStyle: ['bg-blue-100', 'text-blue-700']
+      'pescetarien': {
+        colors: ['#06B6D4', '#0891B2'] as const,
+        icon: 'fish',
+        label: 'Pescetarien',
+        simpleStyle: ['bg-cyan-100', 'text-cyan-700']
       }
     };
     
@@ -104,10 +98,13 @@ const DietaryBadges: React.FC<DietaryBadgesProps> = ({
             key={index}
             {...(animate && { entering: FadeIn.delay(index * 100).springify() })}
           >
-            <View className={`${dietInfo.simpleStyle[0]} rounded-full px-2.5 py-0.5 mr-1.5 mb-1`}>
-              <Text className={`text-xs ${dietInfo.simpleStyle[1]} font-medium`}>
-                {dietInfo.label}
-              </Text>
+            <View className={`${dietInfo.simpleStyle[0]} rounded-full w-7 h-7 justify-center items-center mr-1.5 mb-1`}>
+              <MaterialCommunityIcons 
+                // @ts-ignore
+                name={dietInfo.icon} 
+                size={16} 
+                color={dietInfo.colors[0]}
+              />
             </View>
           </BadgeWrapper>
         );

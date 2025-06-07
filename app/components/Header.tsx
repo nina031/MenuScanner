@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from "react";
 import { TouchableOpacity, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter, useSegments } from "expo-router";
+import { useRouter, usePathname } from "expo-router";
 
 type HeaderProps = {
   onLeftPress?: () => void;
@@ -13,28 +13,54 @@ type HeaderProps = {
   hasActiveFilters?: boolean;
 };
 
-export default function Header({ onLeftPress, onRightPress, filteredItemsCount, hasActiveFilters }: HeaderProps) {
+export default function Header(props: HeaderProps) {
     const router = useRouter();
-    const segments = useSegments();
+    const pathname = usePathname();
     
-    // Déterminer l'onglet actuel
-    const currentTab = segments[1] || 'index'; // segments[0] est "(tabs)", segments[1] est l'onglet
+    // Actions par défaut pour les boutons
+    const handleLanguagePress = () => {
+        console.log('Language button pressed - TODO: implement language selection');
+        // TODO: Implémenter la sélection de langue
+    };
     
+    const handleDarkModePress = () => {
+        console.log('Dark mode button pressed - TODO: implement dark mode toggle');
+        // TODO: Implémenter le toggle dark mode
+    };
+    
+    // Éviter l'accès direct aux props pour éviter les erreurs de rendu
     const handleLeftPress = () => {
-        if (onLeftPress) {
-            onLeftPress();
+        if (props.onLeftPress) {
+            props.onLeftPress();
         } else if (currentTab === 'scan') {
             router.back();
+        } else {
+            handleLanguagePress();
         }
-        // Pour l'onglet home, on peut ajouter une action par défaut si nécessaire
     };
     
     const handleRightPress = () => {
-        if (onRightPress) {
-            onRightPress();
+        if (props.onRightPress) {
+            props.onRightPress();
+        } else if (currentTab !== 'scan') {
+            handleDarkModePress();
         }
-        // Actions par défaut selon l'onglet si nécessaire
     };
+    
+    const itemCount = (props.filteredItemsCount && typeof props.filteredItemsCount === 'number') ? props.filteredItemsCount : 0;
+    const showFilters = Boolean(props.hasActiveFilters);
+    
+    // Détecter l'onglet actuel basé sur le pathname
+    const getCurrentTab = () => {
+        if (pathname === '/' || pathname === '/index') return 'index';
+        if (pathname === '/scan') return 'scan';
+        if (pathname === '/profile') return 'profile';
+        if (pathname?.includes('/menus/')) return 'scan'; // Page de menu = mode scan
+        return 'scan'; // Par défaut
+    };
+    
+    const currentTab = getCurrentTab();
+    
     
     // Configuration des icônes selon l'onglet
     const getHeaderConfig = () => {
@@ -46,6 +72,17 @@ export default function Header({ onLeftPress, onRightPress, filteredItemsCount, 
                     rightIconType: 'AntDesign' as const,
                 };
             case 'index':
+                return {
+                    leftIcon: 'globe-outline' as const,
+                    rightIcon: 'moon-outline' as const,
+                    rightIconType: 'Ionicons' as const,
+                };
+            case 'profile':
+                return {
+                    leftIcon: 'globe-outline' as const,
+                    rightIcon: 'moon-outline' as const,
+                    rightIconType: 'Ionicons' as const,
+                };
             default:
                 return {
                     leftIcon: 'globe-outline' as const,
@@ -84,9 +121,9 @@ export default function Header({ onLeftPress, onRightPress, filteredItemsCount, 
                                     <Ionicons name={rightIcon} size={22} color="white" />
                                 }
                             </TouchableOpacity>
-                            {hasActiveFilters && filteredItemsCount && filteredItemsCount > 0 && (
+                            {showFilters && itemCount > 0 && (
                                 <View className="absolute -top-1 -right-1 bg-white rounded-full w-5 h-5 items-center justify-center">
-                                    <Text className="text-xs text-[#129EA1] font-medium">{filteredItemsCount}</Text>
+                                    <Text className="text-xs text-[#129EA1] font-medium">{itemCount}</Text>
                                 </View>
                             )}
                         </View>

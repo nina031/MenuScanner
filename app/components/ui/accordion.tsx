@@ -13,7 +13,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { AntDesign } from '@expo/vector-icons';
-import { cn } from '../../lib/utils';
+import { cn } from '../../../src/lib/utils';
 import { TextClassContext } from './text';
 
 

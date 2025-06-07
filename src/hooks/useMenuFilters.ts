@@ -4,7 +4,7 @@ import { MenuItem, MenuSection } from '../types/menu';
 import { useMenuFilterStore } from '../stores/MenuFilterStore';
 
 export const useMenuFilters = (sections: MenuSection[]) => {
-  const { dietary, priceRange, sortBy } = useMenuFilterStore();
+  const { dietary, allergens, priceRange, sortBy } = useMenuFilterStore();
   
   const filteredSections = useMemo(() => {
     return sections.map((section) => {
@@ -15,6 +15,30 @@ export const useMenuFilters = (sections: MenuSection[]) => {
         filteredItems = filteredItems.filter((item) =>
           dietary.every((diet) => item.dietary.includes(diet))
         );
+      }
+      
+      // Filtre par allergènes (exclure les plats contenant les allergènes sélectionnés)
+      if (allergens.length > 0) {
+        console.log('🧪 FILTRAGE ALLERGÈNES:', {
+          section: section.name,
+          allergensToExclude: allergens,
+          itemsBeforeFilter: filteredItems.length
+        });
+        
+        filteredItems = filteredItems.filter((item) => {
+          const hasAllergen = allergens.some((allergen) => item.allergens?.includes(allergen));
+          console.log(`🧪 ITEM "${item.name}":`, {
+            allergens: item.allergens,
+            hasExcludedAllergen: hasAllergen,
+            excluded: hasAllergen
+          });
+          return !hasAllergen;
+        });
+        
+        console.log('🧪 APRÈS FILTRAGE:', {
+          section: section.name,
+          itemsAfterFilter: filteredItems.length
+        });
       }
       
       // Filtre par prix
@@ -36,13 +60,13 @@ export const useMenuFilters = (sections: MenuSection[]) => {
         items: filteredItems,
       };
     }).filter((section) => section.items.length > 0); // Retire les sections vides
-  }, [sections, dietary, priceRange, sortBy]);
+  }, [sections, dietary, allergens, priceRange, sortBy]);
   
   const totalFilteredItems = useMemo(() => {
     return filteredSections.reduce((acc, section) => acc + section.items.length, 0);
   }, [filteredSections]);
   
-  const hasActiveFilters = dietary.length > 0 || priceRange[0] > 0 || priceRange[1] < 50 || sortBy !== 'none';
+  const hasActiveFilters = dietary.length > 0 || allergens.length > 0 || priceRange[0] > 0 || priceRange[1] < 50 || sortBy !== 'none';
   
   return {
     filteredSections,

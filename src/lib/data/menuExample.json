@@ -23,7 +23,8 @@
                             "balsamique",
                             "tomates confites"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers", "Fruits à coque"]
                     },
                     {
                         "name": "Légumes grillés marinés",
@@ -42,10 +43,9 @@
                         ],
                         "dietary": [
                             "végétarien",
-                            "végétalien",
-                            "sans_gluten",
-                            "sans_lactose"
-                        ]
+                            "vegan"
+                        ],
+                        "allergens": []
                     },
                     {
                         "name": "Gorgonzola fondante",
@@ -61,7 +61,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Produits laitiers"]
                     },
                     {
                         "name": "Mozzarella di Bufala",
@@ -76,7 +77,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Produits laitiers"]
                     },
                     {
                         "name": "Mozzarella di Burrata",
@@ -91,7 +93,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Produits laitiers"]
                     },
                     {
                         "name": "Rital cochonnailles",
@@ -103,7 +106,8 @@
                         "ingredients": [
                             "charcuteries italiennes"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": []
                     }
                 ]
             },
@@ -126,7 +130,8 @@
                             "croûtons",
                             "parmesan"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Œufs", "Produits laitiers"]
                     },
                     {
                         "name": "La Prima Donna",
@@ -143,7 +148,8 @@
                             "miel",
                             "huile d'olive"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers", "Fruits à coque"]
                     },
                     {
                         "name": "Verdure Burrata",
@@ -160,7 +166,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Produits laitiers", "Fruits à coque"]
                     }
                 ]
             },
@@ -183,7 +190,8 @@
                             "origan",
                             "persil"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Œufs", "Fruits à coque"]
                     },
                     {
                         "name": "Tartare de boeuf",
@@ -202,7 +210,8 @@
                             "câpres",
                             "parmesan"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Fruits à coque", "Produits laitiers"]
                     },
                     {
                         "name": "Carpaccio de boeuf",
@@ -218,7 +227,8 @@
                             "roquette",
                             "parmesan"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Produits laitiers"]
                     },
                     {
                         "name": "Vitello tonnato",
@@ -233,7 +243,10 @@
                             "anchois",
                             "huile d'olive"
                         ],
-                        "dietary": []
+                        "dietary": [
+                            "pescetarien"
+                        ],
+                        "allergens": ["Poissons"]
                     }
                 ]
             },
@@ -257,7 +270,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Fruits à coque", "Produits laitiers"]
                     },
                     {
                         "name": "Rigatoni all'amatriciana",
@@ -273,7 +287,8 @@
                             "piments",
                             "pecorino"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Fusilli giganti alla Puttanesca",
@@ -290,7 +305,10 @@
                             "parmesan",
                             "mozzarella di bufala"
                         ],
-                        "dietary": []
+                        "dietary": [
+                            "pescetarien"
+                        ],
+                        "allergens": ["Gluten", "Poissons", "Produits laitiers"]
                     },
                     {
                         "name": "La pâte à la truffe",
@@ -307,7 +325,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Pesto forever",
@@ -323,7 +342,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Fruits à coque", "Produits laitiers"]
                     },
                     {
                         "name": "Gnocchi ai funghi, guanciale",
@@ -338,7 +358,8 @@
                             "joue de porc",
                             "parmesan"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Œufs", "Produits laitiers"]
                     }
                 ]
             },
@@ -358,7 +379,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Produits laitiers", "Fruits à coque"]
                     },
                     {
                         "name": "Tiramisu",
@@ -375,7 +397,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Œufs", "Produits laitiers"]
                     },
                     {
                         "name": "Baba au rhum",
@@ -392,7 +415,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Œufs", "Produits laitiers"]
                     },
                     {
                         "name": "Mousse al cioccolato della Nonna",
@@ -408,7 +432,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Œufs", "Produits laitiers"]
                     },
                     {
                         "name": "Panna cotta",
@@ -423,7 +448,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Produits laitiers"]
                     },
                     {
                         "name": "Café gourmand",
@@ -438,7 +464,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Œufs", "Produits laitiers"]
                     }
                 ]
             },
@@ -461,7 +488,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Regina",
@@ -477,7 +505,8 @@
                             "jambon",
                             "olives"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Tartufata",
@@ -495,7 +524,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Veggie lovers",
@@ -514,7 +544,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Cinque formaggi",
@@ -534,7 +565,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Ô mon cochon",
@@ -550,7 +582,8 @@
                             "burrata",
                             "joue de porc"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "La Materazzi",
@@ -568,7 +601,8 @@
                             "balsamique",
                             "roquette"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers", "Fruits à coque"]
                     },
                     {
                         "name": "Cicciolina",
@@ -585,7 +619,8 @@
                             "roquette",
                             "balsamique"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Courgettes with love",
@@ -605,7 +640,8 @@
                         ],
                         "dietary": [
                             "végétarien"
-                        ]
+                        ],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Red Hot Chili Biquette",
@@ -621,7 +657,8 @@
                             "ricotta",
                             "oignons rouges"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers"]
                     },
                     {
                         "name": "Buffalo Bufala",
@@ -638,7 +675,8 @@
                             "basilic",
                             "oeuf"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Œufs", "Produits laitiers"]
                     },
                     {
                         "name": "La Reine des truffes",
@@ -654,7 +692,8 @@
                             "jambon aux truffes",
                             "pignons de pin"
                         ],
-                        "dietary": []
+                        "dietary": [],
+                        "allergens": ["Gluten", "Produits laitiers", "Fruits à coque"]
                     }
                 ]
             }
